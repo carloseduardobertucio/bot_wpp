@@ -4,6 +4,8 @@ import { processSticker } from "./sendSticker";
 
 export const commandMapper = async ({socket , message}: MessageClient ,command : string)=> {
     if(command == "/remover") return admGroupMembersActions({socket , message}, {action : "remove"})
+    if(command == "/promover") return admGroupMembersActions({socket , message}, {action : "promote"})
+    if(command == "/rebaixar") return admGroupMembersActions({socket , message}, {action : "demote"})
     if(command == "/figura") return processSticker({socket,message})
         
     return sendMessage({socket, text : `comando ${command} não existe`, sendTo : message.remotejid} )

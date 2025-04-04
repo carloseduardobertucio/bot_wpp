@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path";
 import sharp from "sharp";
 import { MessageClient} from "./onMessagesUpsert";
-import  {assertMediaContent, downloadContentFromMessage ,downloadMediaMessage} from "@whiskeysockets/baileys";
+import  {downloadMediaMessage} from "@whiskeysockets/baileys";
 
 
 export const processSticker = async ({ socket , message} : MessageClient ) => {
@@ -13,7 +13,7 @@ export const processSticker = async ({ socket , message} : MessageClient ) => {
     const sender = message.remotejid;
 
     // Baixar a imagem
-    const imagePath = await downloadImage(message, "imagem.jpg");
+    const imagePath = await downloadImage(message, "../public/imagem.jpg");
 
     // Converter em figurinha
     const stickerPath = await convertToSticker(imagePath);
