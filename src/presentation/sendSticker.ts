@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path";
 import sharp from "sharp";
 import { MessageClient} from "./onMessagesUpsert";
-import  downloadContentFromMessage from "@whiskeysockets/baileys";
+import  {assertMediaContent, downloadContentFromMessage ,downloadMediaMessage} from "@whiskeysockets/baileys";
 
 
 export const processSticker = async ({ socket , message} : MessageClient ) => {
@@ -13,7 +13,7 @@ export const processSticker = async ({ socket , message} : MessageClient ) => {
     const sender = message.remotejid;
 
     // Baixar a imagem
-    const imagePath = await downloadImage(mediaMessage, "imagem.jpg");
+    const imagePath = await downloadImage(message, "imagem.jpg");
 
     // Converter em figurinha
     const stickerPath = await convertToSticker(imagePath);
@@ -23,10 +23,12 @@ export const processSticker = async ({ socket , message} : MessageClient ) => {
 }
 
 
-export async function downloadContentWithTimeout(mediaMessage, timeoutMs = 5000) {
+export async function downloadContentWithTimeout(mediaMessage: any, timeoutMs = 5000) {
     return Promise.race([
-        downloadContentFromMessage(mediaMessage),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout ao baixar a imagem")), timeoutMs))
+        downloadMediaMessage(mediaMessage, "stream", {}),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Timeout ao baixar a imagem")), timeoutMs)
+        )
     ]);
 }
 
